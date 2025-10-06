@@ -5,7 +5,7 @@ let watchInterval;
 const attendanceTime = 10; // 4600 출석 기준 (초)
 let studentName = "";
 
-const SHEET_WEBHOOK_URL = "AKfycbwXptSa8x2tfk40AS2DDI_zw2V8TgxyPul0wK36yHxdC8OUqvn8qiz3lU1sBoTD-o-W"; // <- Apps Script URL
+const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwXptSa8x2tfk40AS2DDI_zw2V8TgxyPul0wK36yHxdC8OUqvn8qiz3lU1sBoTD-o-W/exec"; // <- Apps Script URL
 
 // 1. 로그인
 function login() {
