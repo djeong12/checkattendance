@@ -16,10 +16,12 @@
 
     <div id="lecture-section" style="display: none;">
       <p id="welcome-msg"></p>
-	<video id="lecture-video" width="640" controls>
-  	<source src="https://drive.google.com/uc?export=download&id=1A1Ow2DHJyKIj_k3ZmR0jRJ7cv-s5jrFB" type="video/mp4">
-  	동영상 재생이 지원되지 않습니다.
-	</video>
+		<iframe width="640" height="360" 
+  		src="https://www.youtube.com/embed/zOiRQD_i6kc?enablejsapi=1" 
+  		title="YouTube video player" frameborder="0"
+  		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  		allowfullscreen>
+		</iframe>
       <div class="status">
         <p>시청 시간: <span id="watch-time">0</span>초</p>
         <p>출석 상태: <span id="attendance-status">미출석</span></p>
@@ -30,3 +32,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
