@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>출석 동영상 강의</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>강의 출석 시스템</h1>
+
+    <div id="login-section">
+      <input type="text" id="student-id" placeholder="이름을 입력하세요">
+      <button onclick="login()">로그인</button>
+    </div>
+
+    <div id="lecture-section" style="display: none;">
+      <p id="welcome-msg"></p>
+	<video id="lecture-video" width="640" controls>
+  	<source src="https://drive.google.com/uc?export=download&id=1A1Ow2DHJyKIj_k3ZmR0jRJ7cv-s5jrFB" type="video/mp4">
+  	동영상 재생이 지원되지 않습니다.
+	</video>
+      <div class="status">
+        <p>시청 시간: <span id="watch-time">0</span>초</p>
+        <p>출석 상태: <span id="attendance-status">미출석</span></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
