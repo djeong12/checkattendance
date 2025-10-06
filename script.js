@@ -1,11 +1,13 @@
+let player;
 let watchSeconds = 0;
 let attendanceGiven = false;
 let watchInterval;
-const attendanceTime = 4600; // 출석 인정 기준 시간 (초)
+const attendanceTime = 10; // 4600 출석 기준 (초)
 let studentName = "";
 
-const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwhqxyf7UaLqlzw_2BxD5gDA1ePYgL26JhRkQwbeRyBkdP4JfkYmPMAVO5RSDrbX7yT/exec"; 
+const SHEET_WEBHOOK_URL = "1A1Ow2DHJyKIj_k3ZmR0jRJ7cv-s5jrFB"; // <- Apps Script URL
 
+// 1. 로그인
 function login() {
   const nameInput = document.getElementById('student-id');
   studentName = nameInput.value.trim();
@@ -19,25 +21,55 @@ function login() {
   document.getElementById('lecture-section').style.display = 'block';
   document.getElementById('welcome-msg').innerText = `${studentName}님, 강의를 시청해 주세요.`;
 
-  const video = document.getElementById('lecture-video');
-
-  video.addEventListener('play', () => {
-    watchInterval = setInterval(() => {
-      watchSeconds++;
-      document.getElementById('watch-time').innerText = watchSeconds;
-
-      if (watchSeconds >= attendanceTime && !attendanceGiven) {
-        document.getElementById('attendance-status').innerText = '출석 완료';
-        attendanceGiven = true;
-        sendAttendance();
-      }
-    }, 1000);
-  });
-
-  video.addEventListener('pause', () => clearInterval(watchInterval));
-  video.addEventListener('ended', () => clearInterval(watchInterval));
+  // YouTube API 로딩 → player 생성
+  loadYouTubePlayer();
 }
 
+// 2. YouTube API가 iframe ready 되면 호출됨
+function onYouTubeIframeAPIReady() {
+  // nothing here — we'll call it after login
+}
+
+// 3. 플레이어 생성
+function loadYouTubePlayer() {
+  player = new YT.Player('player', {
+    height: '360',
+    width: '640',
+    videoId: 'zOiRQD_i6kc', // <-- YouTube
+    playerVars: {
+      autoplay: 0,
+      controls: 1,
+    },
+    events: {
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+// 4. 재생 상태 감지 → 시청 시간 측정
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.PLAYING) {
+    // 재생 시작 → 시청 시간 측정 시작
+    if (!watchInterval) {
+      watchInterval = setInterval(() => {
+        watchSeconds++;
+        document.getElementById('watch-time').innerText = watchSeconds;
+
+        if (watchSeconds >= attendanceTime && !attendanceGiven) {
+          attendanceGiven = true;
+          document.getElementById('attendance-status').innerText = '출석 완료';
+          sendAttendance();
+        }
+      }, 1000);
+    }
+  } else {
+    // 일시정지나 정지 → 시간 측정 중지
+    clearInterval(watchInterval);
+    watchInterval = null;
+  }
+}
+
+// 5. 출석 정보 전송
 function sendAttendance() {
   fetch(SHEET_WEBHOOK_URL, {
     method: "POST",
